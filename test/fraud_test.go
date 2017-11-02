@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/l-vitaly/equifax"
+	"github.com/devimteam/equifax"
 )
 
 func TestClient(t *testing.T) {

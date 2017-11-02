@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/l-vitaly/acharset"
-	"github.com/l-vitaly/cryptopro"
+	"github.com/devimteam/acharset"
+	"github.com/devimteam/cryptopro"
 	"github.com/lestrrat/go-libxml2/parser"
 	"github.com/lestrrat/go-libxml2/xsd"
 	"github.com/pkg/errors"

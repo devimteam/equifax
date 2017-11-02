@@ -14,10 +14,10 @@ func NewBatchFraud() *batchFraud {
 	return &batchFraud{}
 }
 
-func csvWriter(out io.Writer) *csv.Writer {
+func csvWriter(out io.Writer) *gocsv.SafeCSVWriter {
 	writer := csv.NewWriter(out)
 	writer.Comma = '\t'
-	return writer
+	return gocsv.NewSafeCSVWriter(writer)
 }
 
 func (*batchFraud) ToCSV(req []*NewApplication) (string, error) {

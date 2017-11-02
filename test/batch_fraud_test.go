@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/l-vitaly/equifax"
-	"github.com/l-vitaly/gounit"
+	"github.com/devimteam/equifax"
+	"github.com/devimteam/gounit"
 )
 
 func TestBatchFraud(t *testing.T) {

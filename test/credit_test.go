@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/l-vitaly/cryptopro"
-	"github.com/l-vitaly/equifax"
-	"github.com/l-vitaly/gounit"
+	"github.com/devimteam/cryptopro"
+	"github.com/devimteam/equifax"
+	"github.com/devimteam/gounit"
 )
 
 func TestCredit(t *testing.T) {
