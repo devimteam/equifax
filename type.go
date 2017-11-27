@@ -58,7 +58,7 @@ type Date struct {
 
 func (et *Date) getValue() string {
     if et.IsZero() {
-        return ""
+        return emptyDateDefault.Format(dateEquifaxFormat)
     }
     return et.Format(dateEquifaxFormat)
 }
