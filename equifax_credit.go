@@ -32,30 +32,30 @@ type bkiRequest struct {
 
 type AddressReg struct {
 	XMLName   xml.Name     `xml:"addr_reg"`
-	Owner     AddressOwner `xml:"owner"`                    // статус регистрации по данному адресу
+	Owner     AddressOwner `xml:"owner,omitempty"`                    // статус регистрации по данному адресу
 	Index     string       `xml:"index"`                    // индекс
 	AddrTotal string       `xml:"addr_reg_total,omitempty"` // адрес регистрации одной строкой
-	Country   Country      `xml:"country"`                  // страна
-	Region    Region       `xml:"region"`                   // код региона
-	City      string       `xml:"city"`                     // населенный пункт
+	Country   Country      `xml:"country,omitempty"`                  // страна
+	Region    Region       `xml:"region,omitempty"`                   // код региона
+	City      string       `xml:"city,omitempty"`                     // населенный пункт
 	District  string       `xml:"district,omitempty"`       // район
-	Street    string       `xml:"street"`                   // улица
-	House     string       `xml:"house"`                    // дом/блок/строение
-	Flat      string       `xml:"flat"`                     // квартира/офис/комната
+	Street    string       `xml:"street,omitempty"`                   // улица
+	House     string       `xml:"house,omitempty"`                    // дом/блок/строение
+	Flat      string       `xml:"flat,omitempty"`                     // квартира/офис/комната
 }
 
 type AddressFact struct {
 	XMLName   xml.Name     `xml:"addr_fact"`
-	Owner     AddressOwner `xml:"owner"`                     // статус регистрации по данному адресу
+	Owner     AddressOwner `xml:"owner,omitempty"`                     // статус регистрации по данному адресу
 	Index     string       `xml:"index"`                     // индекс
 	AddrTotal string       `xml:"addr_fact_total,omitempty"` // адрес фактического местонахождения одной строкой
-	Country   Country      `xml:"country"`                   // страна
-	Region    Region       `xml:"region"`                    // код региона
-	City      string       `xml:"city"`                      // населенный пункт
+	Country   Country      `xml:"country,omitempty"`                   // страна
+	Region    Region       `xml:"region,omitempty"`                    // код региона
+	City      string       `xml:"city,omitempty"`                      // населенный пункт
 	District  string       `xml:"district,omitempty"`        // район
-	Street    string       `xml:"street"`                    // улица
-	House     string       `xml:"house"`                     // дом/блок/строение
-	Flat      string       `xml:"flat"`                      // квартира/офис/комната
+	Street    string       `xml:"street,omitempty"`                    // улица
+	House     string       `xml:"house,omitempty"`                     // дом/блок/строение
+	Flat      string       `xml:"flat,omitempty"`                      // квартира/офис/комната
 }
 
 type EmploymentCompany struct {
