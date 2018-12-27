@@ -2,6 +2,7 @@ package equifax
 
 import (
 	"bytes"
+	"encoding/asn1"
 	"encoding/xml"
 	"io"
 	"io/ioutil"
@@ -223,17 +224,19 @@ type equifaxCredit struct {
 	url       string
 	partnerID string
 	crt       cryptopro.Cert
+	hashAlg   asn1.ObjectIdentifier
 	schema    string
 	saveReq   bool
 }
 
-func NewEquifaxCredit(url string, partnerID string, crt cryptopro.Cert, schema string, saveReq bool) EquifaxCredit {
+func NewEquifaxCredit(url string, partnerID string, crt cryptopro.Cert, schema string, hashAlg asn1.ObjectIdentifier, saveReq bool) EquifaxCredit {
 	return &equifaxCredit{
 		url:       url,
 		partnerID: partnerID,
 		crt:       crt,
 		schema:    schema,
 		saveReq:   saveReq,
+		hashAlg:   hashAlg,
 	}
 }
 
@@ -287,17 +290,18 @@ func (e *equifaxCredit) Get(r *CreditRequest) (*CreditResponse, error) {
 	}
 	reqBuf = bytes.NewBuffer(reqEncBytes)
 
-    if e.schema != "" {
-        err = e.requestValidate(reqBuf.Bytes())
-        if err != nil {
-            return nil, err
-        }
-    }
+	if e.schema != "" {
+		err = e.requestValidate(reqBuf.Bytes())
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	dest := new(bytes.Buffer)
 
 	msg, err := cryptopro.OpenToEncode(dest, cryptopro.EncodeOptions{
 		Signers: []cryptopro.Cert{e.crt},
+		HashAlg: e.hashAlg,
 	})
 	if err != nil {
 		return nil, err
