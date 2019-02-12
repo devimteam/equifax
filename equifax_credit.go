@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"encoding/asn1"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/devimteam/acharset"
@@ -227,9 +229,10 @@ type equifaxCredit struct {
 	hashAlg   asn1.ObjectIdentifier
 	schema    string
 	saveReq   bool
+	saveResp  bool
 }
 
-func NewEquifaxCredit(url string, partnerID string, crt cryptopro.Cert, schema string, hashAlg asn1.ObjectIdentifier, saveReq bool) EquifaxCredit {
+func NewEquifaxCredit(url string, partnerID string, crt cryptopro.Cert, schema string, hashAlg asn1.ObjectIdentifier, saveReq, saveResp bool) EquifaxCredit {
 	return &equifaxCredit{
 		url:       url,
 		partnerID: partnerID,
@@ -237,6 +240,7 @@ func NewEquifaxCredit(url string, partnerID string, crt cryptopro.Cert, schema s
 		schema:    schema,
 		saveReq:   saveReq,
 		hashAlg:   hashAlg,
+		saveResp:  saveResp,
 	}
 }
 
@@ -331,7 +335,11 @@ func (e *equifaxCredit) Get(r *CreditRequest) (*CreditResponse, error) {
 		return nil, ErrInvalidRequest
 	}
 
-	respMsg, err := cryptopro.OpenToDecode(resp.Body)
+	var responseReader io.Reader = resp.Body
+	if e.saveResp {
+		responseReader, _ = saveToFileDecorator(resp.Body, time.Now().Format("20060102150405")+".resp.sig")
+	}
+	respMsg, err := cryptopro.OpenToDecode(responseReader)
 
 	cBuf := bytes.NewBuffer([]byte{})
 	_, err = io.Copy(cBuf, respMsg)
@@ -353,4 +361,18 @@ func (e *equifaxCredit) Get(r *CreditRequest) (*CreditResponse, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+func saveToFileDecorator(r io.Reader, filename string) (io.Reader, error) {
+	f, err := os.Create(filename)
+	if err != nil {
+		return nil, fmt.Errorf("create file error: %v", err)
+	}
+	defer f.Close()
+	b := new(bytes.Buffer)
+	w := io.MultiWriter(f, b)
+	if _, err := io.Copy(w, r); err != nil {
+		return nil, fmt.Errorf("copy to file: %v", err)
+	}
+	return b, nil
 }
